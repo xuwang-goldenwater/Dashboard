@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Daily HQ — Xu Wang</title>
+<!-- GitHub Pages: https://xuwang-goldenwater.github.io/Dashboard/ -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daily HQ">
+<meta name="theme-color" content="#1A1A2E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%231A1A2E'/%3E%3Ctext x='90' y='120' font-family='Arial' font-weight='bold' font-size='72' fill='white' text-anchor='middle'%3EHQ%3C/text%3E%3C/svg%3E">
+<script src="https://accounts.google.com/gsi/client" async></script>
+<style>
+:root{color-scheme:light;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,Arial,sans-serif;background:#F0F2F8;color:#1a1a2e;font-size:14px;padding-bottom:40px;}
+
+/* Setup / Login */
+.fullscreen{position:fixed;inset:0;background:#1A1A2E;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;padding:24px;text-align:center;overflow-y:auto;}
+.fs-logo{font-size:48px;margin-bottom:8px;}
+.fs-title{color:white;font-size:24px;font-weight:700;margin-bottom:6px;}
+.fs-sub{color:rgba(255,255,255,0.6);font-size:13px;margin-bottom:32px;line-height:1.5;}
+.fs-card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:24px;width:100%;max-width:380px;}
+.fs-label{color:rgba(255,255,255,0.7);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;text-align:left;}
+.fs-input{width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;color:white;padding:12px 14px;font-size:13px;outline:none;margin-bottom:16px;}
+.fs-input::placeholder{color:rgba(255,255,255,0.35);}
+.fs-input:focus{border-color:#E94560;}
+.fs-btn{width:100%;background:#E94560;color:white;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:opacity .15s;}
+.fs-btn:hover{opacity:.9;}
+.fs-btn.secondary{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);}
+.fs-steps{text-align:left;margin-top:20px;}
+.fs-step{display:flex;gap:10px;margin-bottom:12px;align-items:flex-start;}
+.step-num{background:#E94560;color:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step-text{color:rgba(255,255,255,0.7);font-size:12px;line-height:1.5;}
+.step-text a{color:#E94560;text-decoration:none;}
+.step-text code{background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:4px;font-size:11px;}
+
+.header{background:linear-gradient(135deg,#1A1A2E 0%,#16213E 60%,#0F3460 100%);color:white;padding:env(safe-area-inset-top,16px) 16px 16px;}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.date-greeting h1{font-size:22px;font-weight:700;letter-spacing:-.3px;}
+.date-greeting p{font-size:12px;opacity:.7;margin-top:2px;}
+.header-actions{display:flex;gap:6px;}
+.icon-btn{background:rgba(255,255,255,.13);border:none;border-radius:8px;color:white;padding:7px 10px;font-size:12px;cursor:pointer;}
+.icon-btn:hover{background:rgba(255,255,255,.22);}
+.stat-bar{display:flex;gap:8px;margin-top:14px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;}
+.stat-bar::-webkit-scrollbar{display:none;}
+.stat-pill{background:rgba(255,255,255,.13);border-radius:20px;padding:5px 12px;font-size:11px;white-space:nowrap;display:flex;align-items:center;gap:5px;}
+.stat-pill span{font-weight:700;font-size:13px;}
+.tabs{display:flex;background:white;border-bottom:1px solid #E8EAF0;position:sticky;top:0;z-index:10;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:0 0 auto;padding:10px 12px;font-size:11px;font-weight:600;color:#888;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.active{color:#0F3460;border-bottom-color:#E94560;}
+.section{padding:12px 12px 0;}
+.section-title{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.badge{background:#E94560;color:white;border-radius:10px;padding:1px 6px;font-size:10px;}
+.card{background:white;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.07);margin-bottom:8px;overflow:hidden;}
+.empty{text-align:center;padding:24px;color:#aaa;font-size:13px;}
+
+/* Email */
+.email-item{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid #F2F4F8;text-decoration:none;color:inherit;transition:background .15s;}
+.email-item:last-child{border-bottom:none;}
+.email-item:hover{background:#F8F9FF;}
+.email-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;color:white;}
+.email-body{flex:1;min-width:0;}
+.email-sender{font-weight:600;font-size:12px;}
+.email-subject{font-size:12px;color:#333;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.email-snippet{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.email-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.email-time{font-size:10px;color:#aaa;white-space:nowrap;}
+.open-tag{font-size:9px;color:#0F3460;font-weight:700;background:#EEF2FF;padding:2px 5px;border-radius:4px;}
+.priority-tag{display:inline-block;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;margin-bottom:3px;}
+.prio-job{background:#FFF3CD;color:#856404;}
+.prio-school{background:#D1ECF1;color:#0c5460;}
+.prio-alert{background:#F8D7DA;color:#721c24;}
+
+/* Events */
+.event-item{display:flex;gap:10px;padding:10px 14px;border-bottom:1px solid #F2F4F8;}
+.event-item:last-child{border-bottom:none;}
+.event-time{font-size:11px;font-weight:600;color:#666;min-width:52px;padding-top:2px;}
+.event-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;background:#0F3460;}
+.event-details{flex:1;}
+.event-title{font-size:13px;font-weight:600;}
+.event-loc{font-size:11px;color:#888;margin-top:2px;}
+
+/* Week */
+.week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:12px;}
+.day-col{background:white;border-radius:8px;overflow:hidden;}
+.day-header{text-align:center;padding:6px 4px 4px;font-size:10px;font-weight:700;color:#888;}
+.day-date{text-align:center;font-size:14px;font-weight:700;color:#1a1a2e;padding-bottom:6px;}
+.day-col.today .day-header{color:#E94560;}
+.day-col.today .day-date{background:#E94560;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:13px;}
+.day-event{background:#EEF2FF;color:#0F3460;border-radius:4px;font-size:9px;padding:2px 4px;margin:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Checkable */
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border-bottom:1px solid #F2F4F8;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.chk-item:last-child{border-bottom:none;}
+.chk-item:hover{background:#FAFAFA;}
+.chk-circle{width:18px;height:18px;border-radius:50%;border:2px solid #DDD;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;transition:all .2s;background:white;color:transparent;}
+.chk-circle.done{background:#0F3460;border-color:#0F3460;color:white;}
+.chk-item.checked .chk-label{text-decoration:line-through;color:#bbb;}
+.chk-label{font-size:12px;font-weight:600;line-height:1.4;}
+.chk-sub{font-size:11px;color:#888;margin-top:2px;}
+
+/* My Tasks */
+.add-task-row{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid #F2F4F8;}
+.task-input{flex:1;border:none;outline:none;font-size:13px;font-family:inherit;background:transparent;}
+.task-input::placeholder{color:#bbb;}
+.task-add-btn{width:28px;height:28px;border-radius:50%;background:#0F3460;color:white;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.my-task-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #F2F4F8;}
+.my-task-item:last-child{border-bottom:none;}
+.my-task-check{width:18px;height:18px;border-radius:50%;border:2px solid #DDD;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;cursor:pointer;transition:all .2s;background:white;color:transparent;}
+.my-task-check.done{background:#E94560;border-color:#E94560;color:white;}
+.my-task-text{flex:1;font-size:12px;line-height:1.4;}
+.my-task-text.done{text-decoration:line-through;color:#bbb;}
+.my-task-meta{font-size:10px;color:#ddd;white-space:nowrap;flex-shrink:0;}
+.my-task-del{width:22px;height:22px;border-radius:50%;border:none;background:#FEE2E2;color:#E94560;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;}
+.my-task-item:hover .my-task-del{opacity:1;}
+.tasks-footer{padding:8px 14px;font-size:10px;color:#ccc;display:flex;justify-content:space-between;}
+.tasks-clear-btn{color:#E94560;background:none;border:none;font-size:10px;cursor:pointer;}
+
+/* Projects */
+.project-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;}
+.project-card{background:white;border-radius:12px;padding:14px;box-shadow:0 1px 4px rgba(0,0,0,.07);border-top:3px solid;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative;}
+.project-card:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.11);}
+.proj-edit-hint{position:absolute;top:10px;right:10px;font-size:11px;color:#ddd;}
+.proj-num{font-size:10px;font-weight:700;opacity:.6;margin-bottom:4px;}
+.proj-name{font-size:13px;font-weight:700;margin-bottom:6px;}
+.proj-goal{font-size:11px;color:#666;line-height:1.4;margin-bottom:8px;}
+.progress-bar{background:#F0F2F8;border-radius:4px;height:5px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s ease;}
+.proj-pct{font-size:10px;color:#888;margin-top:4px;}
+
+/* Milestones */
+.milestone-item{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-bottom:1px solid #F2F4F8;cursor:pointer;}
+.milestone-item:last-child{border-bottom:none;}
+.milestone-item:hover{background:#FAFAFA;}
+.milestone-week{font-size:12px;font-weight:700;color:#0F3460;min-width:28px;padding-top:1px;}
+.milestone-body{flex:1;}
+.milestone-dates{font-size:10px;color:#aaa;margin-bottom:2px;}
+.milestone-label{font-size:12px;font-weight:600;}
+.milestone-desc{font-size:11px;color:#666;line-height:1.5;margin-top:2px;}
+.milestone-hint{font-size:10px;color:#ddd;flex-shrink:0;padding-top:2px;}
+
+/* Inbox Summary */
+.insum-wrap{padding:14px;}
+.insum-overview{font-size:12px;color:#444;line-height:1.6;margin-bottom:10px;}
+.insum-sec{margin-bottom:8px;}
+.insum-lbl{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.lbl-red{color:#C0393A;} .lbl-orange{color:#C2410C;} .lbl-green{color:#0F6B3E;}
+.insum-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;}
+.insum-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.dot-red{background:#E94560;} .dot-orange{background:#F97316;} .dot-green{background:#0F6B3E;}
+.insum-text{font-size:11px;color:#444;line-height:1.4;flex:1;}
+.insum-open-btn{background:#EEF2FF;border:none;border-radius:5px;color:#0F3460;font-size:10px;font-weight:700;padding:4px 8px;cursor:pointer;white-space:nowrap;margin-top:3px;flex-shrink:0;text-decoration:none;display:inline-block;}
+
+/* Tech Digest */
+.digest-item{padding:12px 14px;border-bottom:1px solid #F2F4F8;}
+.digest-item:last-child{border-bottom:none;}
+.digest-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:4px;}
+.proj-tag{display:inline-flex;align-items:center;border-radius:5px;padding:2px 7px;font-size:9px;font-weight:800;white-space:nowrap;flex-shrink:0;}
+.tag-finsight{background:#E8F4FD;color:#0F3460;}
+.tag-media{background:#FEF0F7;color:#C0399F;}
+.tag-lume{background:#F3E8FD;color:#6B21A8;}
+.tag-job{background:#FFF3CD;color:#856404;}
+.tag-ai{background:#E8FDF0;color:#0F6B3E;}
+.digest-headline{font-size:13px;font-weight:600;line-height:1.35;flex:1;}
+.digest-insight{font-size:11px;color:#555;line-height:1.5;}
+.digest-source{font-size:10px;color:#aaa;margin-top:4px;display:flex;align-items:center;justify-content:space-between;}
+.digest-open-btn{font-size:10px;color:#0F3460;font-weight:700;text-decoration:none;background:#EEF2FF;padding:2px 7px;border-radius:4px;}
+.tech-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid #F2F4F8;background:#FAFBFF;}
+.tech-hdr-text{font-size:11px;color:#555;flex:1;}
+.source-row{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid #F2F4F8;gap:8px;text-decoration:none;color:inherit;}
+.source-row:last-child{border-bottom:none;}
+.source-row:hover{background:#F8F9FF;}
+.source-name{font-size:11px;font-weight:600;color:#333;min-width:90px;flex-shrink:0;}
+.source-subj{font-size:11px;color:#666;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.source-time{font-size:10px;color:#aaa;flex-shrink:0;}
+
+/* Reading */
+.read-check-item{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.read-big-check{width:24px;height:24px;border-radius:50%;border:2px solid #C9A84C;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transition:all .2s;background:white;color:transparent;}
+.read-big-check.done{background:#C9A84C;border-color:#C9A84C;color:white;}
+.read-book-info{flex:1;}
+.read-book-name{font-size:13px;font-weight:700;}
+.read-book-meta{font-size:11px;color:#888;margin-top:2px;}
+.read-streak-num{font-size:20px;font-weight:700;color:#C9A84C;line-height:1;text-align:right;}
+.read-streak-lbl{font-size:9px;color:#aaa;text-align:right;}
+.book-list-wrap{display:flex;flex-direction:column;gap:1px;background:#F2F4F8;}
+.book-row{display:flex;align-items:center;gap:10px;padding:11px 14px;background:white;cursor:pointer;}
+.book-row:hover{background:#FAFAFA;}
+.book-q{font-size:10px;font-weight:700;color:#C9A84C;min-width:24px;flex-shrink:0;}
+.book-info{flex:1;min-width:0;}
+.book-name{font-size:12px;font-weight:600;}
+.book-author{font-size:11px;color:#888;}
+.book-status{font-size:10px;padding:2px 7px;border-radius:4px;font-weight:700;white-space:nowrap;flex-shrink:0;cursor:pointer;}
+.st-active{background:#FFF8E7;color:#8B6914;}
+.st-done{background:#E8F5E8;color:#2E7D32;}
+.st-next{background:#F0F2F8;color:#888;}
+.book-del{width:22px;height:22px;border-radius:50%;border:none;background:#FEE2E2;color:#E94560;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0;}
+.book-row:hover .book-del{opacity:1;}
+.add-book-row{display:flex;gap:6px;padding:10px 14px;background:white;}
+.add-book-input{flex:1;border:1px solid #E8EAF0;border-radius:8px;padding:8px 10px;font-size:12px;outline:none;font-family:inherit;}
+.add-book-input:focus{border-color:#C9A84C;}
+.add-book-btn{background:#C9A84C;color:white;border:none;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;}
+
+/* Modals */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:none;align-items:flex-end;}
+.modal-overlay.open{display:flex;}
+.modal-sheet{background:white;border-radius:20px 20px 0 0;padding:20px 20px 32px;width:100%;animation:slideUp .25s ease;max-height:85vh;overflow-y:auto;}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{width:36px;height:4px;background:#E0E0E0;border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;}
+.modal-label{font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.6px;margin:12px 0 6px;}
+.modal-label:first-of-type{margin-top:0;}
+.modal-input{width:100%;border:1px solid #E8EAF0;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;font-family:inherit;}
+.modal-input:focus{border-color:#0F3460;}
+.modal-textarea{width:100%;border:1px solid #E8EAF0;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;font-family:inherit;resize:none;line-height:1.5;}
+.modal-textarea:focus{border-color:#0F3460;}
+.pct-row{display:flex;align-items:center;gap:12px;}
+.pct-slider{flex:1;-webkit-appearance:none;height:6px;border-radius:3px;outline:none;cursor:pointer;background:#E8EAF0;}
+.pct-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:#0F3460;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.pct-display{font-size:16px;font-weight:700;min-width:36px;text-align:right;}
+.modal-btn-row{display:flex;gap:10px;margin-top:18px;}
+.modal-btn{flex:1;padding:13px;border-radius:12px;font-size:14px;font-weight:700;border:none;cursor:pointer;}
+.modal-btn.primary{background:#0F3460;color:white;}
+.modal-btn.secondary{background:#F0F2F8;color:#555;}
+
+/* Loading */
+.async-row{display:flex;align-items:center;gap:8px;padding:14px;color:#888;font-size:12px;}
+.pulse{width:8px;height:8px;border-radius:50%;background:#0F3460;animation:pulse 1.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.panel{display:none;} .panel.active{display:block;}
+#loading-overlay{position:fixed;inset:0;background:white;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;gap:12px;}
+.spinner{width:32px;height:32px;border:3px solid #EEF2FF;border-top-color:#0F3460;border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<!-- Setup Screen -->
+<div id="screen-setup" class="fullscreen" style="display:none;">
+  <div class="fs-logo">🔧</div>
+  <div class="fs-title">First-time Setup</div>
+  <div class="fs-sub">Enter your Google OAuth Client ID to connect Calendar and Gmail.</div>
+  <div class="fs-card">
+    <div class="fs-label">Google Client ID</div>
+    <input id="input-client-id" class="fs-input" type="text" placeholder="xxxxxx.apps.googleusercontent.com" autocomplete="off" spellcheck="false">
+    <button class="fs-btn" onclick="saveClientId()">Save &amp; Connect →</button>
+    <div class="fs-steps">
+      <div class="fs-step"><div class="step-num">1</div><div class="step-text">打开 <a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a>，新建项目。</div></div>
+      <div class="fs-step"><div class="step-num">2</div><div class="step-text">启用 <code>Gmail API</code> + <code>Google Calendar API</code>。</div></div>
+      <div class="fs-step"><div class="step-num">3</div><div class="step-text">Credentials → OAuth 2.0 Client ID → Web application。</div></div>
+      <div class="fs-step"><div class="step-num">4</div><div class="step-text">Authorized JavaScript origins 加入 <code>https://xuwang-goldenwater.github.io</code></div></div>
+      <div class="fs-step"><div class="step-num">5</div><div class="step-text">复制 Client ID 粘贴到上方输入框。</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Login Screen -->
+<div id="screen-login" class="fullscreen" style="display:none;">
+  <div class="fs-logo">📊</div>
+  <div class="fs-title">Daily HQ</div>
+  <div class="fs-sub">Sign in with Google to load your calendar and emails.</div>
+  <div class="fs-card">
+    <button class="fs-btn" onclick="signIn()">Sign in with Google</button>
+    <button class="fs-btn secondary" onclick="showSetup()">⚙ Change Client ID</button>
+  </div>
+</div>
+
+<!-- Loading -->
+<div id="loading-overlay" style="display:none;">
+  <div class="spinner"></div>
+  <div style="font-size:13px;color:#666" id="loading-text">Loading your dashboard…</div>
+</div>
+
+<!-- Project Modal -->
+<div class="modal-overlay" id="proj-modal" onclick="closeMod('proj-modal',event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="proj-modal-title">Update</div>
+    <div class="modal-label">Progress</div>
+    <div class="pct-row">
+      <input type="range" class="pct-slider" id="proj-slider" min="0" max="100" step="5">
+      <div class="pct-display" id="proj-pct-num">0%</div>
+    </div>
+    <div class="modal-label">Status Note</div>
+    <input class="modal-input" id="proj-note" type="text">
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeMod('proj-modal')">Cancel</button>
+      <button class="modal-btn primary" id="proj-save-btn" onclick="saveProject()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Milestone Modal -->
+<div class="modal-overlay" id="ms-modal" onclick="closeMod('ms-modal',event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="ms-modal-title">Edit Milestone</div>
+    <div class="modal-label">Label</div>
+    <input class="modal-input" id="ms-label" type="text">
+    <div class="modal-label">Description</div>
+    <textarea class="modal-textarea" id="ms-desc" rows="3"></textarea>
+    <div class="modal-btn-row">
+      <button class="modal-btn secondary" onclick="closeMod('ms-modal')">Cancel</button>
+      <button class="modal-btn primary" onclick="saveMilestone()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Dashboard -->
+<div id="screen-main" style="display:none;">
+
+<div class="header">
+  <div class="header-top">
+    <div class="date-greeting">
+      <h1 id="greeting">Good morning, Xu 👋</h1>
+      <p id="date-line"></p>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="loadAll()">↻</button>
+      <button class="icon-btn" onclick="signOut()" style="font-size:11px">Out</button>
+    </div>
+  </div>
+  <div class="stat-bar">
+    <div class="stat-pill">📧 <span id="s-unread">—</span></div>
+    <div class="stat-pill">📅 <span id="s-events">—</span></div>
+    <div class="stat-pill">⚡ <span id="s-attn">—</span></div>
+    <div class="stat-pill">📌 <span id="s-tasks">0</span></div>
+    <div class="stat-pill">📡 <span id="s-tech">—</span></div>
+    <div class="stat-pill">📚 <span id="s-streak">0</span>d</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('today')">⚡ Today</button>
+  <button class="tab" onclick="switchTab('week')">🗓 Week</button>
+  <button class="tab" onclick="switchTab('projects')">🚀 Projects</button>
+  <button class="tab" onclick="switchTab('inbox')">📧 Inbox</button>
+  <button class="tab" onclick="switchTab('tech')">📡 Tech</button>
+  <button class="tab" onclick="switchTab('reading')">📚 Reading</button>
+</div>
+
+<!-- TODAY -->
+<div id="panel-today" class="panel active">
+  <div class="section">
+    <div class="section-title">⚡ Needs Attention <span class="badge" id="attn-badge">0</span></div>
+    <div class="card" id="attn-list"><div class="empty">Loading…</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">📅 Today's Schedule</div>
+    <div class="card" id="today-events"><div class="empty">Loading…</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">🎯 Job Search Checklist</div>
+    <div class="card" id="job-checklist"></div>
+  </div>
+  <div class="section">
+    <div class="section-title">📌 My Tasks <span class="badge" id="tasks-badge">0</span></div>
+    <div class="card">
+      <div class="add-task-row">
+        <input class="task-input" id="task-input" type="text" placeholder="Add a task… (Enter)" onkeydown="if(event.key==='Enter')addTask()">
+        <button class="task-add-btn" onclick="addTask()">+</button>
+      </div>
+      <div id="task-list"></div>
+      <div class="tasks-footer"><span id="tasks-count"></span><button class="tasks-clear-btn" onclick="clearDone()">Clear completed</button></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">📚 Today's Reading</div>
+    <div class="card" id="reading-today"></div>
+  </div>
+</div>
+
+<!-- WEEK -->
+<div id="panel-week" class="panel">
+  <div class="week-grid" id="week-grid"></div>
+  <div class="section">
+    <div class="section-title">This Week's Events</div>
+    <div class="card" id="week-list"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<div id="panel-projects" class="panel">
+  <div class="section" style="padding-bottom:4px">
+    <div class="section-title">🚀 Projects <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:#bbb">tap to update</span></div>
+  </div>
+  <div class="project-grid" id="project-grid"></div>
+  <div class="section">
+    <div class="section-title">📅 Milestones <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:#bbb">tap to edit</span></div>
+    <div class="card" id="milestone-list"></div>
+  </div>
+</div>
+
+<!-- INBOX -->
+<div id="panel-inbox" class="panel">
+  <div class="section">
+    <div class="section-title">📋 Summary</div>
+    <div class="card" id="inbox-ai"><div class="async-row"><div class="pulse"></div>Analyzing inbox…</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">📧 All Unread <span class="badge" id="inbox-badge">0</span></div>
+    <div class="card" id="inbox-list"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- TECH -->
+<div id="panel-tech" class="panel">
+  <div class="section">
+    <div class="section-title">📡 Tech Digest <span class="badge" id="tech-badge">—</span></div>
+    <div class="card" id="tech-card">
+      <div id="tech-list"><div class="async-row"><div class="pulse"></div>Loading newsletters…</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">📬 Sources</div>
+    <div class="card" id="source-list"><div class="empty">Loading…</div></div>
+  </div>
+</div>
+
+<!-- READING -->
+<div id="panel-reading" class="panel">
+  <div class="section">
+    <div class="section-title">📖 Reading List <span style="font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:#bbb">tap status to cycle · × to remove</span></div>
+    <div class="card">
+      <div class="book-list-wrap" id="book-list"></div>
+      <div class="add-book-row">
+        <input class="add-book-input" id="book-input" type="text" placeholder="Title · Author (optional)">
+        <button class="add-book-btn" onclick="addBook()">+ Add</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:20px 16px 8px;font-size:11px;color:#aaa;">
+  Built in Public ·
+  <a href="https://github.com/xuwang-goldenwater" target="_blank" style="color:#0F3460;text-decoration:none;font-weight:600">@xuwang-goldenwater</a>
+  · <a href="https://github.com/xuwang-goldenwater/Dashboard" target="_blank" style="color:#0F3460;text-decoration:none">Dashboard</a>
+</div>
+
+</div><!-- /screen-main -->
+
+<script>
+// ══════════════════════════════════════
+// OAUTH
+// ══════════════════════════════════════
+const CID_KEY='xu_client_id', TOKEN_KEY='xu_token';
+const SCOPES='https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/gmail.readonly';
+let clientId=localStorage.getItem(CID_KEY)||'';
+let accessToken=sessionStorage.getItem(TOKEN_KEY)||'';
+let tokenClient=null, gsiReady=false;
+
+function showSetup(){['screen-setup','screen-login','screen-main'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById('screen-setup').style.display='flex';}
+function showLogin(){['screen-setup','screen-login','screen-main'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById('screen-login').style.display='flex';}
+function showMain(){['screen-setup','screen-login'].forEach(s=>document.getElementById(s).style.display='none');document.getElementById('screen-main').style.display='block';}
+function showLoading(msg='Loading your dashboard…'){document.getElementById('loading-text').textContent=msg;document.getElementById('loading-overlay').style.display='flex';}
+function hideLoading(){document.getElementById('loading-overlay').style.display='none';}
+
+function saveClientId(){
+  const val=(document.getElementById('input-client-id').value||'').trim();
+  if(!val||!val.includes('.apps.googleusercontent.com')){alert('Please paste a valid Client ID ending in .apps.googleusercontent.com');return;}
+  clientId=val;localStorage.setItem(CID_KEY,clientId);accessToken='';sessionStorage.removeItem(TOKEN_KEY);initGSI();showLogin();
+}
+function initGSI(){
+  if(!window.google||!clientId)return;
+  tokenClient=google.accounts.oauth2.initTokenClient({client_id:clientId,scope:SCOPES,callback:onToken,error_callback:e=>{console.error(e);hideLoading();showLogin();}});
+  gsiReady=true;
+}
+function onToken(resp){if(resp.error){hideLoading();showLogin();return;}accessToken=resp.access_token;sessionStorage.setItem(TOKEN_KEY,accessToken);showMain();loadAll();}
+function signIn(){if(!gsiReady){initGSI();if(!gsiReady){alert('Google SDK still loading, try again in a second.');return;}}showLoading('Connecting to Google…');tokenClient.requestAccessToken({prompt:''});}
+function signOut(){accessToken='';sessionStorage.removeItem(TOKEN_KEY);if(window.google)google.accounts.oauth2.revoke(accessToken,()=>{});showLogin();}
+
+// ══════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════
+function ls(k){try{return JSON.parse(localStorage.getItem(k));}catch(e){return null;}}
+function lsSet(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function todayStr(){const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;}
+function timeAgo(d){const m=Math.round((Date.now()-new Date(d))/60000);return m<60?m+'m':m<1440?Math.round(m/60)+'h':Math.round(m/1440)+'d';}
+function daysAgo(d){return Math.round((Date.now()-new Date(d))/86400000);}
+function fmtTime(dt){if(!dt)return'All day';return new Date(dt).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',hour12:true});}
+const COLORS=['#E94560','#0F3460','#0F6B3E','#9B59B6','#E67E22','#2980B9'];
+function aColor(s){let h=0;for(const c of(s||''))h=(h*31+c.charCodeAt(0))%COLORS.length;return COLORS[h];}
+function sName(raw){const m=(raw||'').match(/^"?([^"<@]+)"?\s*</);return m?m[1].trim():(raw||'').split('@')[0];}
+function headerVal(headers,name){return (headers||[]).find(h=>h.name.toLowerCase()===name.toLowerCase())?.value||'';}
+function hd(s){return(s||'').replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');}
+function gmailUrl(threadId){return `https://mail.google.com/mail/u/0/#inbox/${threadId||''}`;}
+function switchTab(n){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+n).classList.add('active');document.querySelectorAll('.tab')[['today','week','projects','inbox','tech','reading'].indexOf(n)].classList.add('active');}
+function closeMod(id,e){if(!e||e.target.id===id)document.getElementById(id).classList.remove('open');}
+function initHeader(){const now=new Date(),h=now.getHours();document.getElementById('greeting').textContent=(h<12?'Good morning':h<18?'Good afternoon':'Good evening')+', Xu 👋';document.getElementById('date-line').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});}
+
+// ══════════════════════════════════════
+// GOOGLE API
+// ══════════════════════════════════════
+async function apiFetch(url){
+  const r=await fetch(url,{headers:{Authorization:'Bearer '+accessToken}});
+  if(r.status===401){accessToken='';sessionStorage.removeItem(TOKEN_KEY);showLogin();throw new Error('Token expired');}
+  return r.json();
+}
+
+// Returns [{id:threadId, messages:[{id,threadId,sender,subject,date,snippet}]}]
+async function fetchThreads(query,maxResults=30){
+  const list=await apiFetch(`https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(query)}&maxResults=${maxResults}`);
+  if(!list.messages?.length)return[];
+  const msgs=await Promise.all(list.messages.map(m=>
+    apiFetch(`https://www.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject&metadataHeaders=From&metadataHeaders=Date`)
+  ));
+  const threadMap=new Map();
+  msgs.forEach(m=>{
+    if(!m||!m.id)return;
+    const h=m.payload?.headers||[];
+    const msg={id:m.id,threadId:m.threadId,sender:headerVal(h,'From'),subject:headerVal(h,'Subject'),date:headerVal(h,'Date'),snippet:hd(m.snippet||'')};
+    if(!threadMap.has(m.threadId))threadMap.set(m.threadId,{id:m.threadId,messages:[msg]});
+  });
+  return Array.from(threadMap.values());
+}
+
+async function fetchEvents(){
+  const now=new Date(),we=new Date(now);we.setDate(now.getDate()+7);
+  const data=await apiFetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${now.toISOString()}&timeMax=${we.toISOString()}&singleEvents=true&orderBy=startTime&maxResults=30`);
+  return data.items||[];
+}
+
+// ══════════════════════════════════════
+// INBOX FILTERING
+// ══════════════════════════════════════
+const SPAM_DOMAINS=['beehiiv.com','substack.com','mailchimp.com','sendgrid.net','quora.com','pinterest.com','eventbrite.com','marketing@','promo@','newsletter@','digest@','noreply@','no-reply@','donotreply@','notification@','updates@','news@','klaviyo','constantcontact','universitycomm'];
+const TRANSACTIONAL=['amazon.com','ebay.com','paypal.com','auto-confirm@','order-','shipment-'];
+const NL_SNIP=['unsubscribe','view in browser','view this email','manage preferences','opt out'];
+const NL_SUB=['newsletter','weekly update','roundup','issue #','edition'];
+const JOB_KW=['interview','application','offer','internship','recruiter','hiring','career','resume','apply','shortlist','phone screen'];
+const SCHOOL=['sjsu.edu'];
+
+function isSpam(s){return SPAM_DOMAINS.some(x=>(s||'').toLowerCase().includes(x));}
+function isTransactional(s){return TRANSACTIONAL.some(x=>(s||'').toLowerCase().includes(x));}
+function isNewsletterContent(sender,subject,snippet){return NL_SNIP.some(p=>(snippet||'').toLowerCase().includes(p))||NL_SUB.some(p=>(subject||'').toLowerCase().includes(p));}
+function isNoise(sender,subject,snippet){return isSpam(sender)||isNewsletterContent(sender,subject,snippet);}
+function isJob(a,b){return JOB_KW.some(k=>((a||'')+(b||'')).toLowerCase().includes(k));}
+function isSchool(s){return SCHOOL.some(x=>(s||'').toLowerCase().includes(x))&&!isSpam(s);}
+function isAlert(s){return /alert|urgent|emergency|bomb|threat/i.test(s||'');}
+function isPerson(s){return !isSpam(s)&&!isTransactional(s)&&!isNewsletterContent(s,'','');}
+
+// ══════════════════════════════════════
+// INBOX SUMMARY
+// ══════════════════════════════════════
+function ruleBasedInbox(threads){
+  const urgent=[],overdue=[];
+  threads.forEach(t=>{
+    const m=t.messages?.[0]||{},s=m.sender||'',sub=m.subject||'',snip=m.snippet||'';
+    if(isNoise(s,sub,snip))return;
+    const age=daysAgo(m.date||new Date());
+    if(isAlert(sub)||isJob(sub,snip))urgent.push({from:sName(s),subject:sub,reason:isJob(sub,snip)?'💼 Job-related':'🚨 Alert',threadId:t.id});
+    else if(age>=3&&isPerson(s))overdue.push({from:sName(s),subject:sub,reason:`Unread ${age} days`,threadId:t.id});
+  });
+  const real=threads.filter(t=>!isNoise(t.messages?.[0]?.sender||'',t.messages?.[0]?.subject||'',t.messages?.[0]?.snippet||'')).length;
+  return{overview:`${threads.length} unread · ${real} from real senders · ${threads.length-real} filtered.`,urgent,overdue};
+}
+function renderInboxSummary(data){
+  const card=document.getElementById('inbox-ai');
+  let html='<div class="insum-wrap"><div class="insum-overview">'+data.overview+'</div>';
+  if(data.urgent?.length){html+='<div class="insum-sec"><div class="insum-lbl lbl-red">🔴 Reply Today ('+data.urgent.length+')</div>';data.urgent.forEach(u=>{html+='<div class="insum-row"><div class="insum-dot dot-red"></div><div class="insum-text"><b>'+u.from+'</b> · '+u.subject+'<br><span style="color:#888;font-size:10px">'+u.reason+'</span></div><a class="insum-open-btn" href="'+gmailUrl(u.threadId)+'" target="_blank">→ Open</a></div>';});html+='</div>';}
+  if(data.overdue?.length){html+='<div class="insum-sec"><div class="insum-lbl lbl-orange">⏰ Possibly Missed ('+data.overdue.length+')</div>';data.overdue.forEach(u=>{html+='<div class="insum-row"><div class="insum-dot dot-orange"></div><div class="insum-text"><b>'+u.from+'</b> · '+u.subject+'<br><span style="color:#888;font-size:10px">'+u.reason+'</span></div><a class="insum-open-btn" href="'+gmailUrl(u.threadId)+'" target="_blank">→ Open</a></div>';});html+='</div>';}
+  if(!data.urgent?.length&&!data.overdue?.length)html+='<div class="insum-row"><div class="insum-dot dot-green"></div><div class="insum-text" style="color:#0F6B3E">✅ No urgent or missed personal emails.</div></div>';
+  html+='</div>';card.innerHTML=html;
+}
+
+// ══════════════════════════════════════
+// TECH DIGEST
+// ══════════════════════════════════════
+const TAG_MAP={'FINSIGHT':{cls:'tag-finsight',label:'📊 FINSIGHT'},'AI-MEDIA':{cls:'tag-media',label:'📱 MEDIA'},'LUME':{cls:'tag-lume',label:'💎 LUME'},'JOB':{cls:'tag-job',label:'🎯 JOB'},'GENERAL-AI':{cls:'tag-ai',label:'⚡ AI'}};
+function autoTag(sub,snip){const t=(sub+' '+snip).toLowerCase();if(/langgraph|langchain|crewai|agent.*financ|financ.*agent|sec edgar|portfolio|stock scre|value invest/.test(t))return'FINSIGHT';if(/etsy|jewelry|pearl|ecommerce|e-commerce|shopify|product photo/.test(t))return'LUME';if(/hiring|job market|intern|salary|data scien.*job|ml engineer|ds job/.test(t))return'JOB';if(/content creat|xiaohongshu|podcast|social media|creator economy/.test(t))return'AI-MEDIA';return'GENERAL-AI';}
+function renderDigestItems(items){
+  const list=document.getElementById('tech-list'),card=document.getElementById('tech-card');
+  const ex=card.querySelector('.tech-hdr');if(ex)ex.remove();
+  const hdr=document.createElement('div');hdr.className='tech-hdr';hdr.innerHTML='<div class="tech-hdr-text">'+items.length+' items</div>';
+  card.insertBefore(hdr,list);list.innerHTML='';
+  items.forEach(item=>{const ti=TAG_MAP[item.tag]||TAG_MAP['GENERAL-AI'],d=document.createElement('div');d.className='digest-item';const linkUrl=item.threadId?gmailUrl(item.threadId):`https://mail.google.com/mail/u/0/#search/${encodeURIComponent(item.source||'')}`;d.innerHTML='<div class="digest-row"><span class="proj-tag '+ti.cls+'">'+ti.label+'</span><div class="digest-headline">'+item.headline+'</div></div><div class="digest-insight">'+item.insight+'</div><div class="digest-source"><span>'+(item.source||'')+'</span><a class="digest-open-btn" href="'+linkUrl+'" target="_blank">→ 查看原文</a></div>';list.appendChild(d);});
+  document.getElementById('tech-badge').textContent=items.length;document.getElementById('s-tech').textContent=items.length;
+}
+function loadTechDigest(techThr){
+  const srcEl=document.getElementById('source-list');srcEl.innerHTML='';
+  if(!techThr.length){srcEl.innerHTML='<div class="empty">No TechNews emails (last 7 days)</div>';document.getElementById('tech-list').innerHTML='<div class="empty">No TechNews emails.<br>Label emails with <b>TechNews</b> in Gmail.</div>';return;}
+  techThr.forEach(t=>{const m=t.messages?.[0]||{};const r=document.createElement('a');r.className='source-row';r.href=gmailUrl(t.id);r.target='_blank';r.innerHTML='<span class="source-name">'+sName(m.sender||'')+'</span><span class="source-subj">'+(m.subject||'')+'</span><span class="source-time">'+timeAgo(m.date)+'</span>';srcEl.appendChild(r);});
+  const items=techThr.map(t=>{const m=t.messages?.[0]||{},sub=m.subject||'',snip=m.snippet||'';return{tag:autoTag(sub,snip),headline:sub.slice(0,80),insight:snip.slice(0,150),source:sName(m.sender||''),threadId:t.id};});
+  renderDigestItems(items);
+}
+
+// ══════════════════════════════════════
+// JOB CHECKLIST
+// ══════════════════════════════════════
+function renderJobChecklist(){
+  const day=new Date().getDay(),today=todayStr();
+  const dt={1:{l:'检查旧申请',s:'Pending 超2周 → 发 follow-up'},3:{l:'更新简历',s:'结合最新项目进展更新 1 处'},5:{l:'复盘 + 更新 Tracker',s:'填写本周投递，规划下周'}};
+  const items=[{id:'apply',icon:'📨',l:'投递 2–3 个职位',s:'Handshake · LinkedIn · Indeed'},{id:'check',icon:'🔍',l:'检查招聘邮件回复',s:'看 interview · recruiter'},{id:'day',icon:'📝',l:dt[day]?.l||'更新求职 Tracker',s:dt[day]?.s||'记录今日投递'},{id:'fu',icon:'🔔',l:'Pending 超 2 周？',s:'发 follow-up 邮件'}];
+  const checks=ls('xu_jb_chk')||{},el=document.getElementById('job-checklist');el.innerHTML='';
+  items.forEach(item=>{const key=today+'_'+item.id,done=!!checks[key];const d=document.createElement('div');d.className='chk-item'+(done?' checked':'');d.innerHTML='<div class="chk-circle'+(done?' done':'')+'">'+( done?'✓':'')+'</div><div><div class="chk-label">'+item.icon+' '+item.l+'</div><div class="chk-sub">'+item.s+'</div></div>';d.onclick=()=>{const c=ls('xu_jb_chk')||{},k=today+'_'+item.id,nd=!c[k];if(nd)c[k]=true;else delete c[k];lsSet('xu_jb_chk',c);renderJobChecklist();};el.appendChild(d);});
+}
+
+// ══════════════════════════════════════
+// MY TASKS
+// ══════════════════════════════════════
+function getTasks(){return ls('xu_tasks_v1')||[];}
+function setTasks(t){lsSet('xu_tasks_v1',t);}
+function renderTasks(){
+  const tasks=getTasks(),list=document.getElementById('task-list'),open=tasks.filter(t=>!t.done),done=tasks.filter(t=>t.done);list.innerHTML='';
+  [...open,...done].forEach(t=>{const row=document.createElement('div');row.className='my-task-item';row.innerHTML='<div class="my-task-check'+(t.done?' done':'')+'\" onclick=\"toggleTask('+t.id+')\">'+( t.done?'✓':'')+'</div><div class="my-task-text'+(t.done?' done':'')+'">'+t.text+'</div><div class="my-task-meta">'+( t.date||'')+'</div><button class="my-task-del" onclick="delTask('+t.id+')">×</button>';list.appendChild(row);});
+  document.getElementById('tasks-badge').textContent=open.length;document.getElementById('s-tasks').textContent=open.length;document.getElementById('tasks-count').textContent=open.length+' open · '+done.length+' done';
+}
+function addTask(){const inp=document.getElementById('task-input'),t=(inp.value||'').trim();if(!t)return;const tasks=getTasks();tasks.unshift({id:Date.now(),text:t,done:false,date:todayStr()});setTasks(tasks);inp.value='';renderTasks();}
+function toggleTask(id){const tasks=getTasks(),t=tasks.find(x=>x.id===id);if(!t)return;t.done=!t.done;setTasks(tasks);renderTasks();}
+function delTask(id){setTasks(getTasks().filter(t=>t.id!==id));renderTasks();}
+function clearDone(){setTasks(getTasks().filter(t=>!t.done));renderTasks();}
+
+// ══════════════════════════════════════
+// READING
+// ══════════════════════════════════════
+const BOOKS_DEFAULT=[{id:1,quarter:'Q1',book:'斯通纳',author:'John Williams',status:'active'},{id:2,quarter:'Q2',book:'Olive Kitteridge',author:'Elizabeth Strout',status:'next'},{id:3,quarter:'Q3',book:'基列 Gilead',author:'Marilynne Robinson',status:'next'},{id:4,quarter:'Q3',book:'Seeing Like a State',author:'James C. Scott',status:'next'},{id:5,quarter:'Q4',book:'Lucy Barton',author:'Elizabeth Strout',status:'next'}];
+function getBooks(){return ls('xu_books_v1')||BOOKS_DEFAULT;}
+function setBooks(b){lsSet('xu_books_v1',b);}
+function currentBook(){const books=getBooks();return books.find(b=>b.status==='active')||books[0]||{book:'No active book',author:'',quarter:''};}
+function getStreak(){return parseInt(localStorage.getItem('xu_streak')||'0',10);}
+function renderReadingToday(){
+  const book=currentBook(),today=todayStr(),checks=ls('xu_rd_chk')||{},key='rd_'+today,done=!!checks[key],streak=getStreak();
+  const el=document.getElementById('reading-today');if(!el)return;
+  el.innerHTML='<div class="read-check-item" onclick="toggleRead()"><div class="read-big-check'+(done?' done':'')+'">'+( done?'✓':'')+'</div><div class="read-book-info"><div class="read-book-name">📖 '+book.book+'</div><div class="read-book-meta">'+book.author+(book.quarter?' · '+book.quarter:'')+'</div></div><div><div class="read-streak-num">'+streak+'</div><div class="read-streak-lbl">day streak</div></div></div>';
+  document.getElementById('s-streak').textContent=streak;
+}
+function toggleRead(){const today=todayStr(),checks=ls('xu_rd_chk')||{},key='rd_'+today,nowDone=!checks[key];if(nowDone){checks[key]=true;const last=localStorage.getItem('xu_rd_last');if(last!==today){const y=new Date();y.setDate(y.getDate()-1);const yStr=y.getFullYear()+'-'+(y.getMonth()+1)+'-'+y.getDate();const ns=(last===yStr)?getStreak()+1:1;localStorage.setItem('xu_streak',ns);localStorage.setItem('xu_rd_last',today);}}else{delete checks[key];}lsSet('xu_rd_chk',checks);renderReadingToday();}
+const ST_CYCLE={'next':'active','active':'done','done':'next'},ST_LABELS={'active':'进行中','done':'✓ 完成','next':'待读'},ST_CLS={'active':'st-active','done':'st-done','next':'st-next'};
+function renderBookList(){const books=getBooks(),el=document.getElementById('book-list');if(!el)return;el.innerHTML='';books.forEach(b=>{const row=document.createElement('div');row.className='book-row';row.innerHTML='<div class="book-q">'+b.quarter+'</div><div class="book-info"><div class="book-name">'+b.book+'</div><div class="book-author">'+b.author+'</div></div><div class="book-status '+(ST_CLS[b.status]||'st-next')+'" onclick="cycleStatus('+b.id+',event)">'+(ST_LABELS[b.status]||'待读')+'</div><button class="book-del" onclick="delBook('+b.id+',event)">×</button>';el.appendChild(row);});}
+function cycleStatus(id,e){e.stopPropagation();const books=getBooks(),b=books.find(x=>x.id===id);if(!b)return;b.status=ST_CYCLE[b.status]||'next';setBooks(books);renderBookList();renderReadingToday();}
+function delBook(id,e){e.stopPropagation();setBooks(getBooks().filter(b=>b.id!==id));renderBookList();}
+function addBook(){const inp=document.getElementById('book-input'),val=(inp.value||'').trim();if(!val)return;const parts=val.split('·').map(s=>s.trim());const books=getBooks();books.push({id:Date.now(),quarter:'—',book:parts[0],author:parts[1]||'',status:'next'});setBooks(books);inp.value='';renderBookList();}
+
+// ══════════════════════════════════════
+// PROJECTS
+// ══════════════════════════════════════
+const PROJ_DEF=[{id:'job',label:'04 · PRIORITY',name:'🎯 Job Search',color:'#E94560',goal:'每周 10–15 投递，目标 2 个面试',pct:20,note:'8 applied · 0 interviews'},{id:'media',label:'01 · MEDIA',name:'📱 AI Media',color:'#C9A84C',goal:'3 篇/周小红书 + 1 播客/两周',pct:10,note:'建立选题库中…'},{id:'finsight',label:'02 · CODE',name:'📊 finsight-ai',color:'#0F6B3E',goal:'Agent Pipeline + GitHub 发布',pct:5,note:'架构设计阶段'},{id:'lume',label:'03 · ETSY',name:'💎 Lume Studio',color:'#9B59B6',goal:'上架 5 款产品 + 完成 SOP',pct:10,note:'产品选定 + 拍摄中'}];
+function getProjects(){return ls('xu_proj_v2')||PROJ_DEF;}
+function setProjects(p){lsSet('xu_proj_v2',p);}
+let editProjId=null;
+function renderProjectGrid(){const projects=getProjects(),grid=document.getElementById('project-grid');grid.innerHTML='';projects.forEach(p=>{const card=document.createElement('div');card.className='project-card';card.style.borderColor=p.color;card.onclick=()=>openProjModal(p.id);card.innerHTML='<div class="proj-edit-hint">✏</div><div class="proj-num">'+p.label+'</div><div class="proj-name">'+p.name+'</div><div class="proj-goal">'+p.goal+'</div><div class="progress-bar"><div class="progress-fill" style="width:'+p.pct+'%;background:'+p.color+'"></div></div><div class="proj-pct">'+p.pct+'% · '+p.note+'</div>';grid.appendChild(card);});}
+function openProjModal(id){const p=getProjects().find(x=>x.id===id);if(!p)return;editProjId=id;document.getElementById('proj-modal-title').textContent=p.name;const s=document.getElementById('proj-slider');s.value=p.pct;s.style.background='linear-gradient(to right,'+p.color+' '+p.pct+'%,#E8EAF0 '+p.pct+'%)';s.oninput=function(){document.getElementById('proj-pct-num').textContent=this.value+'%';this.style.background='linear-gradient(to right,'+p.color+' '+this.value+'%,#E8EAF0 '+this.value+'%)';};document.getElementById('proj-pct-num').textContent=p.pct+'%';document.getElementById('proj-pct-num').style.color=p.color;document.getElementById('proj-note').value=p.note;document.getElementById('proj-save-btn').style.background=p.color;document.getElementById('proj-modal').classList.add('open');}
+function saveProject(){if(!editProjId)return;const projects=getProjects(),idx=projects.findIndex(x=>x.id===editProjId);if(idx===-1)return;projects[idx].pct=parseInt(document.getElementById('proj-slider').value,10);projects[idx].note=document.getElementById('proj-note').value.trim()||projects[idx].note;setProjects(projects);renderProjectGrid();document.getElementById('proj-modal').classList.remove('open');editProjId=null;}
+
+// ══════════════════════════════════════
+// MILESTONES
+// ══════════════════════════════════════
+const MS_DEF=[{id:1,week:'W1',dates:'6/2–8',label:'Setup',desc:'投递 10 个 · 小红书 1 篇 · Agent 架构图 · 产品选定'},{id:2,week:'W2',dates:'6/9–15',label:'Build',desc:'follow-up 旧申请 · 播客 EP1 · Pipeline 跑通 · 第 1 款上架'},{id:3,week:'W3',dates:'6/16–22',label:'Ship',desc:'目标 1 面试 · 第 4–6 篇 · UI 可演示 · 第 2–3 款上架'},{id:4,week:'W4',dates:'6/23–30',label:'Review',desc:'求职复盘 · EP2 · GitHub 公开 · 5 款全上架'}];
+function getMilestones(){return ls('xu_milestones')||MS_DEF;}
+function setMilestones(m){lsSet('xu_milestones',m);}
+let editMsId=null;
+function renderMilestones(){const ms=getMilestones(),el=document.getElementById('milestone-list');el.innerHTML='';ms.forEach(m=>{const row=document.createElement('div');row.className='milestone-item';row.onclick=()=>openMsModal(m.id);row.innerHTML='<div class="milestone-week">'+m.week+'</div><div class="milestone-body"><div class="milestone-dates">'+m.dates+'</div><div class="milestone-label">'+m.label+'</div><div class="milestone-desc">'+m.desc+'</div></div><div class="milestone-hint">✏</div>';el.appendChild(row);});}
+function openMsModal(id){const ms=getMilestones(),m=ms.find(x=>x.id===id);if(!m)return;editMsId=id;document.getElementById('ms-modal-title').textContent=m.week+' · '+m.dates;document.getElementById('ms-label').value=m.label;document.getElementById('ms-desc').value=m.desc;document.getElementById('ms-modal').classList.add('open');}
+function saveMilestone(){const ms=getMilestones(),idx=ms.findIndex(x=>x.id===editMsId);if(idx===-1)return;ms[idx].label=document.getElementById('ms-label').value.trim()||ms[idx].label;ms[idx].desc=document.getElementById('ms-desc').value.trim()||ms[idx].desc;setMilestones(ms);renderMilestones();document.getElementById('ms-modal').classList.remove('open');editMsId=null;}
+
+// ══════════════════════════════════════
+// RENDERERS
+// ══════════════════════════════════════
+function renderEmail(em,showPrio=false){
+  const sub=em.subject||'(no subject)',snip=em.snippet||'',s=em.sender||'';
+  let tag='';if(showPrio){if(isAlert(sub))tag='<div class="priority-tag prio-alert">🚨 ALERT</div>';else if(isJob(sub,snip))tag='<div class="priority-tag prio-job">💼 JOB</div>';else if(isSchool(s))tag='<div class="priority-tag prio-school">🎓 SCHOOL</div>';}
+  const a=document.createElement('a');a.className='email-item';a.href=gmailUrl(em.threadId);a.target='_blank';a.rel='noopener noreferrer';
+  a.innerHTML='<div class="email-avatar" style="background:'+aColor(s)+'">'+sName(s).charAt(0).toUpperCase()+'</div><div class="email-body">'+tag+'<div class="email-sender">'+sName(s)+'</div><div class="email-subject">'+sub+'</div><div class="email-snippet">'+snip+'</div></div><div class="email-right"><div class="email-time">'+timeAgo(em.date)+'</div><div class="open-tag">→ open</div></div>';
+  return a;
+}
+function renderEvent(ev,showDate=false){
+  const start=ev.start?.dateTime||ev.start?.date,d=document.createElement('div');d.className='event-item';
+  let dp='';if(showDate&&start)dp='<div style="font-size:10px;color:#888;margin-bottom:2px">'+new Date(start).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})+'</div>';
+  d.innerHTML='<div class="event-time">'+fmtTime(ev.start?.dateTime)+'</div><div class="event-dot"></div><div class="event-details">'+dp+'<div class="event-title">'+(ev.summary||'(no title)')+'</div>'+(ev.location?'<div class="event-loc">📍 '+ev.location+'</div>':'')+'</div>';
+  return d;
+}
+
+// ══════════════════════════════════════
+// MAIN LOAD
+// ══════════════════════════════════════
+async function loadAll(){
+  showLoading();
+  initHeader();renderJobChecklist();renderTasks();renderReadingToday();renderProjectGrid();renderMilestones();renderBookList();
+  document.getElementById('inbox-ai').innerHTML='<div class="async-row"><div class="pulse"></div>Analyzing inbox…</div>';
+  document.getElementById('tech-list').innerHTML='<div class="async-row"><div class="pulse"></div>Loading newsletters…</div>';
+  try{
+    const now=new Date(),ts=new Date(now),te=new Date(now);ts.setHours(0,0,0,0);te.setHours(23,59,59,999);
+    const[events,inboxThr,techThr]=await Promise.all([fetchEvents(),fetchThreads('is:unread in:inbox',30),fetchThreads('label:TechNews newer_than:7d',10)]);
+    const todayEvts=events.filter(e=>{const s=new Date(e.start?.dateTime||e.start?.date);return s>=ts&&s<=te;});
+    const attnThr=inboxThr.filter(t=>{const m=t.messages?.[0]||{};if(isNoise(m.sender||'',m.subject||'',m.snippet||''))return false;return isAlert(m.subject||'')||isJob(m.subject||'',m.snippet||'')||isSchool(m.sender||'');});
+    const inboxAll=inboxThr.filter(t=>{const m=t.messages?.[0]||{};return!isSpam(m.sender||'')&&!isNewsletterContent(m.sender||'',m.subject||'',m.snippet||'');});
+
+    document.getElementById('s-unread').textContent=inboxThr.length;
+    document.getElementById('s-events').textContent=todayEvts.length;
+    document.getElementById('s-attn').textContent=attnThr.length;
+    document.getElementById('attn-badge').textContent=attnThr.length;
+    document.getElementById('inbox-badge').textContent=inboxAll.length;
+
+    const attnEl=document.getElementById('attn-list');attnEl.innerHTML='';
+    if(!attnThr.length)attnEl.innerHTML='<div class="empty">✅ Nothing urgent — all clear!</div>';
+    else attnThr.forEach(t=>{const m=t.messages?.[0]||{};attnEl.appendChild(renderEmail({sender:m.sender,subject:m.subject,snippet:m.snippet,date:m.date,threadId:t.id},true));});
+
+    const todEl=document.getElementById('today-events');todEl.innerHTML='';
+    if(!todayEvts.length)todEl.innerHTML='<div class="empty">No events today 🎉</div>';
+    else todayEvts.forEach(e=>todEl.appendChild(renderEvent(e)));
+
+    const grid=document.getElementById('week-grid');grid.innerHTML='';
+    const DN=['Su','Mo','Tu','We','Th','Fr','Sa'];
+    for(let i=0;i<7;i++){const d=new Date(ts);d.setDate(d.getDate()+i);const col=document.createElement('div');col.className='day-col'+(i===0?' today':'');col.innerHTML='<div class="day-header">'+DN[d.getDay()]+'</div><div class="day-date">'+d.getDate()+'</div>';events.filter(e=>new Date(e.start?.dateTime||e.start?.date).toDateString()===d.toDateString()).slice(0,2).forEach(e=>{const dot=document.createElement('div');dot.className='day-event';dot.textContent=e.summary||'Event';col.appendChild(dot);});grid.appendChild(col);}
+
+    const wl=document.getElementById('week-list');wl.innerHTML='';
+    if(!events.length)wl.innerHTML='<div class="empty">No events this week</div>';
+    else events.forEach(e=>wl.appendChild(renderEvent(e,true)));
+
+    const il=document.getElementById('inbox-list');il.innerHTML='';
+    if(!inboxAll.length)il.innerHTML='<div class="empty">Inbox zero! 🎉</div>';
+    else inboxAll.forEach(t=>{const m=t.messages?.[0]||{};il.appendChild(renderEmail({sender:m.sender,subject:m.subject,snippet:m.snippet,date:m.date,threadId:t.id}));});
+
+    renderInboxSummary(ruleBasedInbox(inboxThr));
+    loadTechDigest(techThr);
+    hideLoading();
+  }catch(err){console.error(err);if(err.message!=='Token expired')hideLoading();}
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+window.addEventListener('load',()=>{
+  initHeader();
+  const tryInit=setInterval(()=>{
+    if(!window.google)return;
+    clearInterval(tryInit);
+    if(!clientId){showSetup();return;}
+    initGSI();
+    if(accessToken){showMain();loadAll();}else showLogin();
+  },150);
+  setTimeout(()=>{clearInterval(tryInit);if(!window.google&&!clientId)showSetup();else if(!window.google)showLogin();},8000);
+});
+</script>
+</body>
+</html>
